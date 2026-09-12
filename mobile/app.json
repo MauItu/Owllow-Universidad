@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "Owllow",
+    "slug": "wallet-clone",
+    "owner": "maurarch",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "scheme": "owllow",
+    "newArchEnabled": true,
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0F0F14"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.owllow.app"
+    },
+    "android": {
+      "package": "com.owllow.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0F0F14"
+      },
+      "edgeToEdgeEnabled": true,
+      "permissions": [],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "plugins": [
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permite elegir una foto de tu galería para adjuntarla como recibo.",
+          "cameraPermission": "Permite tomar una foto del recibo con la cámara.",
+          "microphonePermission": false
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d1a959a4-1885-4e2e-a90d-53838005629a"
+      }
+    }
+  }
+}

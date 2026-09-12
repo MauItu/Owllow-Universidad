@@ -1,0 +1,188 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1780903787703,
+      "tag": "0000_adorable_ted_forrester",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1781072405131,
+      "tag": "0001_tags",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781072764520,
+      "tag": "0002_savings",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1781073076035,
+      "tag": "0003_debts",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1781102812348,
+      "tag": "0004_splits",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1781163928116,
+      "tag": "0005_fat_junta",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1781243153549,
+      "tag": "0006_unknown_exodus",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1781282894676,
+      "tag": "0007_hard_red_shift",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1781317899726,
+      "tag": "0008_youthful_living_lightning",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1781358748267,
+      "tag": "0009_complex_morg",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1781375702623,
+      "tag": "0010_sour_slayback",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1781387569252,
+      "tag": "0011_slimy_rogue",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1781413508243,
+      "tag": "0012_dear_legion",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1781415177901,
+      "tag": "0013_unique_thor",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1781474702972,
+      "tag": "0014_credito_cuotas_deuda",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1781487520635,
+      "tag": "0015_clammy_blindfold",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1781500010126,
+      "tag": "0016_warm_bug",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1781504755445,
+      "tag": "0017_sudden_veda",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1781525722627,
+      "tag": "0018_shallow_robbie_robertson",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1781527060851,
+      "tag": "0019_jazzy_microchip",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1781548477172,
+      "tag": "0020_handy_millenium_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1781548477173,
+      "tag": "0021_balance_nonnegative_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1783185808216,
+      "tag": "0022_damp_moondragon",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1783186880164,
+      "tag": "0023_lethal_squirrel_girl",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1783206969203,
+      "tag": "0024_regular_drax",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1787447973138,
+      "tag": "0025_savings_target_amount_nullable",
+      "breakpoints": true
+    }
+  ]
+}

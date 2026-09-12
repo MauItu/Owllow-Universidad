@@ -1,0 +1,113 @@
+LICENCIA DE SOFTWARE PROPIETARIO
+Owllow — Aplicación de gestión de finanzas personales
+
+Copyright (c) 2026 Mauricio Jesus Iturriza Medina.
+Todos los derechos reservados. / All rights reserved.
+
+================================================================================
+1. TITULARIDAD
+================================================================================
+
+Este software, su código fuente, su documentación, su diseño de interfaz, su
+modelo de datos y todos los materiales asociados (en adelante, "el Software")
+son obra original de Mauricio Jesus Iturriza Medina (en adelante, "el Autor"),
+quien conserva la titularidad exclusiva de todos los derechos patrimoniales y
+morales de autor sobre el mismo.
+
+El Software fue concebido, desarrollado y es mantenido por el Autor de forma
+independiente, con recursos propios y fuera del marco de cualquier relación
+laboral, contractual o académica. Su entrega parcial o total como trabajo
+académico NO transfiere, cede, licencia ni comparte derecho alguno sobre el
+Software con ninguna institución educativa, docente, evaluador o tercero.
+
+================================================================================
+2. PERMISO LIMITADO DE EVALUACIÓN ACADÉMICA
+================================================================================
+
+El Autor concede un permiso limitado, revocable, no exclusivo, intransferible y
+libre de regalías a la institución educativa ante la cual el Software sea
+presentado y al personal docente designado para su evaluación, con el ÚNICO y
+EXCLUSIVO propósito de:
+
+  a) acceder al código fuente y leerlo;
+  b) compilar y ejecutar el Software en un entorno local o de prueba;
+  c) revisarlo y calificarlo como trabajo académico del Autor.
+
+Este permiso se limita al período de evaluación de la asignatura correspondiente
+y se extingue automáticamente al concluir dicha evaluación.
+
+================================================================================
+3. RESTRICCIONES
+================================================================================
+
+Salvo autorización previa, expresa y por escrito del Autor, queda estrictamente
+prohibido a cualquier persona o entidad:
+
+  a) usar el Software con fines comerciales, productivos o de lucro, directo o
+     indirecto;
+  b) copiar, reproducir, publicar, distribuir, sublicenciar, vender, alquilar,
+     prestar o poner a disposición del público el Software o cualquier parte
+     de él, por cualquier medio, incluyendo repositorios públicos;
+  c) crear obras derivadas, adaptaciones, traducciones o modificaciones;
+  d) realizar ingeniería inversa, descompilar o desensamblar el Software, salvo
+     en la medida en que la ley aplicable lo permita de forma imperativa;
+  e) reclamar la autoría del Software o presentarlo como trabajo propio;
+  f) incorporar el Software, en todo o en parte, a otro proyecto, producto o
+     servicio;
+  g) remover, alterar u ocultar los avisos de copyright, autoría o licencia
+     presentes en el Software o en sus archivos fuente;
+  h) usar la denominación "Owllow", sus logotipos o su identidad visual para
+     identificar productos o servicios de terceros.
+
+================================================================================
+4. AUSENCIA DE CESIÓN DE DERECHOS
+================================================================================
+
+Ninguna disposición de esta licencia constituye una cesión de derechos de autor.
+El permiso de la Sección 2 es una autorización de uso estrictamente limitada. La
+presentación del Software como entregable académico no lo convierte en obra
+colectiva, obra por encargo ni obra de la institución receptora.
+
+================================================================================
+5. CONFIDENCIALIDAD
+================================================================================
+
+El código fuente del Software se entrega con carácter confidencial. Quienes
+accedan a él en virtud de la Sección 2 se obligan a no divulgarlo ni facilitar
+su acceso a terceros ajenos al proceso de evaluación.
+
+================================================================================
+6. AUSENCIA DE GARANTÍA
+================================================================================
+
+EL SOFTWARE SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
+IMPLÍCITA, INCLUYENDO PERO NO LIMITÁNDOSE A LAS GARANTÍAS DE COMERCIABILIDAD,
+IDONEIDAD PARA UN PROPÓSITO PARTICULAR Y NO INFRACCIÓN. EN NINGÚN CASO EL AUTOR
+SERÁ RESPONSABLE POR RECLAMACIONES, DAÑOS U OTRAS RESPONSABILIDADES, YA SEA EN
+UNA ACCIÓN CONTRACTUAL, EXTRACONTRACTUAL O DE CUALQUIER OTRA ÍNDOLE, DERIVADAS
+DE O RELACIONADAS CON EL SOFTWARE O SU USO.
+
+El Software no constituye asesoría financiera. El Autor no se responsabiliza por
+decisiones económicas tomadas con base en la información que el Software procese
+o presente.
+
+================================================================================
+7. INCUMPLIMIENTO Y LEY APLICABLE
+================================================================================
+
+Cualquier uso del Software fuera de los términos aquí establecidos constituye
+una infracción de los derechos de autor del Autor y extingue de forma inmediata
+y automática el permiso concedido en la Sección 2, sin perjuicio de las acciones
+legales que correspondan.
+
+Esta licencia se rige por la legislación de la República de Colombia en materia
+de derecho de autor (Ley 23 de 1982, Ley 44 de 1993 y Decisión Andina 351 de
+1993) y por los tratados internacionales aplicables, incluido el Convenio de
+Berna.
+
+================================================================================
+CONTACTO
+================================================================================
+
+Para solicitar autorizaciones de uso distintas a las aquí concedidas, contactar
+al Autor: Mauricio Jesus Iturriza Medina.

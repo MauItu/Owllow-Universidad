@@ -1,0 +1,36 @@
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# Expo
+mobile/.expo/
+mobile/dist/
+mobile/android/
+mobile/ios/
+*.apk
+*.aab
+
+# Drizzle: el journal (meta/_journal.json + snapshots) SÍ se versiona — drizzle-kit
+# lo necesita para rastrear qué migraciones existen y su orden en checkouts limpios.
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / herramientas locales
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build
+server/dist/

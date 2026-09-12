@@ -1,0 +1,215 @@
+/*
+ * Owllow — Copyright (c) 2026 Mauricio Jesus Iturriza Medina.
+ * Todos los derechos reservados. Software propietario.
+ * Uso restringido; ver LICENSE en la raíz del proyecto.
+ */
+
+import { Router } from 'express';
+import { and, eq, asc, inArray, count } from 'drizzle-orm';
+import { z } from 'zod';
+import { db } from '../db/connection.js';
+import {
+  categories,
+  transactions,
+  templates,
+  budgets,
+  recurringRules,
+  splitExpenses,
+  type Category,
+} from '../db/schema.js';
+import { asyncHandler, ApiError, isUniqueViolation } from '../middleware/errorHandler.js';
+import { parseId } from '../utils/parseId.js';
+import { userId } from '../middleware/auth.js';
+
+export const categoriesRouter = Router();
+
+const categorySchema = z.object({
+  name: z.string().min(1).max(80),
+  type: z.enum(['income', 'expense']),
+  icon: z.string().min(1).max(50),
+  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/),
+  parentId: z.number().int().nullable().optional(),
+  sortOrder: z.number().int().optional(),
+});
+
+/** Verifica que la categoría padre (si se envió) pertenezca al usuario (400 si no). */
+async function assertParentOwned(uid: number, parentId: number | null | undefined): Promise<void> {
+  if (parentId == null) return;
+  const [parent] = await db
+    .select({ id: categories.id })
+    .from(categories)
+    .where(and(eq(categories.id, parentId), eq(categories.userId, uid)));
+  if (!parent) throw new ApiError(400, 'La categoría padre no existe');
+}
+
+type CategoryWithChildren = Category & { children: Category[] };
+
+/** Anida subcategorías dentro de su padre. */
+function nest(rows: Category[]): CategoryWithChildren[] {
+  const parents = rows
+    .filter((c) => c.parentId === null)
+    .map((p) => ({ ...p, children: [] as Category[] }));
+  const byId = new Map(parents.map((p) => [p.id, p]));
+  for (const c of rows) {
+    if (c.parentId !== null) {
+      const parent = byId.get(c.parentId);
+      if (parent) parent.children.push(c);
+    }
+  }
+  return parents;
+}
+
+// GET /api/categories — todas, con subcategorías anidadas
+categoriesRouter.get(
+  '/',
+  asyncHandler(async (req, res) => {
+    const rows = await db
+      .select()
+      .from(categories)
+      .where(and(eq(categories.userId, userId(req)), eq(categories.isActive, true)))
+      .orderBy(asc(categories.sortOrder), asc(categories.id))
+      // TODO: paginar con load-more en mobile
+      .limit(200);
+    res.json(nest(rows));
+  }),
+);
+
+// GET /api/categories/:type — income | expense
+categoriesRouter.get(
+  '/:type',
+  asyncHandler(async (req, res) => {
+    const type = req.params.type;
+    if (type !== 'income' && type !== 'expense') {
+      throw new ApiError(400, "El tipo debe ser 'income' o 'expense'");
+    }
+    const rows = await db
+      .select()
+      .from(categories)
+      .where(and(eq(categories.userId, userId(req)), eq(categories.type, type)))
+      .orderBy(asc(categories.sortOrder), asc(categories.id))
+      // TODO: paginar con load-more en mobile
+      .limit(200);
+    res.json(nest(rows.filter((r) => r.isActive)));
+  }),
+);
+
+// POST /api/categories
+categoriesRouter.post(
+  '/',
+  asyncHandler(async (req, res) => {
+    const uid = userId(req);
+    const data = categorySchema.parse(req.body);
+    await assertParentOwned(uid, data.parentId);
+    // UNIQUE parcial (user,type,lower(name)) entre categorías padre → 409 amable.
+    let row;
+    try {
+      [row] = await db
+        .insert(categories)
+        .values({
+          userId: uid,
+          name: data.name,
+          type: data.type,
+          icon: data.icon,
+          color: data.color,
+          parentId: data.parentId ?? null,
+          sortOrder: data.sortOrder ?? 0,
+        })
+        .returning();
+    } catch (err) {
+      if (isUniqueViolation(err)) throw new ApiError(409, 'Ya tienes una categoría con ese nombre');
+      throw err;
+    }
+    res.status(201).json(row);
+  }),
+);
+
+// PUT /api/categories/:id
+categoriesRouter.put(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    const uid = userId(req);
+    const id = parseId(req.params.id);
+    const data = categorySchema.partial().parse(req.body);
+    await assertParentOwned(uid, data.parentId);
+    let row;
+    try {
+      [row] = await db
+        .update(categories)
+        .set({
+          ...(data.name !== undefined && { name: data.name }),
+          ...(data.type !== undefined && { type: data.type }),
+          ...(data.icon !== undefined && { icon: data.icon }),
+          ...(data.color !== undefined && { color: data.color }),
+          ...(data.parentId !== undefined && { parentId: data.parentId }),
+          ...(data.sortOrder !== undefined && { sortOrder: data.sortOrder }),
+        })
+        .where(and(eq(categories.id, id), eq(categories.userId, userId(req))))
+        .returning();
+    } catch (err) {
+      if (isUniqueViolation(err)) throw new ApiError(409, 'Ya tienes una categoría con ese nombre');
+      throw err;
+    }
+    if (!row) throw new ApiError(404, 'Categoría no encontrada');
+    res.json(row);
+  }),
+);
+
+/** Cuenta cuántas filas de cada tabla dependiente referencian alguna de estas categorías. */
+async function referenceCounts(categoryIds: number[]) {
+  const [[tx], [tpl], [bud], [rec], [se]] = await Promise.all([
+    db.select({ n: count() }).from(transactions).where(inArray(transactions.categoryId, categoryIds)),
+    db.select({ n: count() }).from(templates).where(inArray(templates.categoryId, categoryIds)),
+    db.select({ n: count() }).from(budgets).where(inArray(budgets.categoryId, categoryIds)),
+    db.select({ n: count() }).from(recurringRules).where(inArray(recurringRules.categoryId, categoryIds)),
+    db.select({ n: count() }).from(splitExpenses).where(inArray(splitExpenses.categoryId, categoryIds)),
+  ]);
+  return {
+    transactions: Number(tx.n),
+    templates: Number(tpl.n),
+    budgets: Number(bud.n),
+    recurringRules: Number(rec.n),
+    splitExpenses: Number(se.n),
+  };
+}
+
+// DELETE /api/categories/:id — CASCADE subcategorías (definido en el FK). Bloquea
+// con 400 si la categoría (o alguna de sus subcategorías) tiene movimientos,
+// plantillas, presupuestos, reglas recurrentes o gastos compartidos asociados:
+// esas FKs son NO ACTION y el borrado fallaría igual, pero con un 500 feo.
+categoriesRouter.delete(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    const uid = userId(req);
+    const id = parseId(req.params.id);
+
+    const [cat] = await db
+      .select({ id: categories.id })
+      .from(categories)
+      .where(and(eq(categories.id, id), eq(categories.userId, uid)));
+    if (!cat) throw new ApiError(404, 'Categoría no encontrada');
+
+    const subcats = await db
+      .select({ id: categories.id })
+      .from(categories)
+      .where(and(eq(categories.parentId, id), eq(categories.userId, uid)));
+    const allIds = [id, ...subcats.map((s) => s.id)];
+
+    const refs = await referenceCounts(allIds);
+    const parts: string[] = [];
+    if (refs.transactions > 0) parts.push(`${refs.transactions} movimiento(s)`);
+    if (refs.templates > 0) parts.push(`${refs.templates} plantilla(s)`);
+    if (refs.budgets > 0) parts.push(`${refs.budgets} presupuesto(s)`);
+    if (refs.recurringRules > 0) parts.push(`${refs.recurringRules} regla(s) recurrente(s)`);
+    if (refs.splitExpenses > 0) parts.push(`${refs.splitExpenses} gasto(s) compartido(s)`);
+    if (parts.length > 0) {
+      throw new ApiError(400, `No se puede eliminar: tiene ${parts.join(', ')} asociado(s)`);
+    }
+
+    const deleted = await db
+      .delete(categories)
+      .where(and(eq(categories.id, id), eq(categories.userId, uid)))
+      .returning();
+    if (deleted.length === 0) throw new ApiError(404, 'Categoría no encontrada');
+    res.json({ success: true });
+  }),
+);

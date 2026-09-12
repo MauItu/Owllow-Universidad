@@ -1,0 +1,1 @@
+ALTER TABLE "savings_goals" ALTER COLUMN "target_amount" DROP NOT NULL;

@@ -1,0 +1,120 @@
+/*
+ * Owllow — Copyright (c) 2026 Mauricio Jesus Iturriza Medina.
+ * Todos los derechos reservados. Software propietario.
+ * Uso restringido; ver LICENSE en la raíz del proyecto.
+ */
+
+import React from 'react';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { type Theme } from '../theme';
+import { useTheme, useThemedStyles } from '../theme/ThemeContext';
+import { Icon } from './Icon';
+import { TagChip } from './TagChip';
+import { formatSigned } from '../utils/formatCurrency';
+import { formatTime } from '../utils/formatDate';
+import type { Transaction } from '../types';
+
+interface Props {
+  transaction: Transaction;
+  onPress?: (t: Transaction) => void;
+}
+
+function TransactionCardComponent({ transaction: t, onPress }: Props) {
+  const { theme } = useTheme();
+  const styles = useThemedStyles(createStyles);
+  const isTransfer = t.type === 'transfer';
+  const amountColor =
+    t.type === 'income' ? theme.colors.income : t.type === 'expense' ? theme.colors.expense : theme.colors.transfer;
+  const iconColor = isTransfer ? theme.colors.transfer : t.categoryColor ?? theme.colors.primary;
+  // Borde izquierdo: rosa gastos, azul ingresos, morado transferencias
+  const edgeColor =
+    t.type === 'expense' ? theme.colors.primary : t.type === 'income' ? theme.colors.secondary : theme.colors.accentLight;
+  const iconName = isTransfer ? 'arrow-left-right' : t.categoryIcon ?? 'circle';
+  const title = t.description?.trim() || t.categoryName || (isTransfer ? 'Transferencia' : 'Sin categoría');
+
+  const subtitle = isTransfer
+    ? `${t.accountName ?? ''} → ${t.toAccountName ?? ''}`
+    : `${t.accountName ?? ''}${t.categoryName && t.description ? ` · ${t.categoryName}` : ''}`;
+
+  return (
+    <Pressable
+      onPress={() => onPress?.(t)}
+      style={({ pressed }) => [styles.card, { borderLeftColor: edgeColor }, pressed && { backgroundColor: theme.colors.surfaceLight }]}
+    >
+      <View style={[styles.iconWrap, { backgroundColor: `${iconColor}26` }]}>
+        <Icon name={iconName} size={20} color={iconColor} />
+      </View>
+      <View style={styles.info}>
+        <Text style={styles.title} numberOfLines={1}>
+          {title}
+        </Text>
+        <Text style={styles.subtitle} numberOfLines={1}>
+          {subtitle}
+        </Text>
+        {!!t.tags?.length && (
+          <View style={styles.tagsRow}>
+            {t.tags.map((tag) => (
+              <TagChip key={tag.id} tag={tag} size="sm" />
+            ))}
+          </View>
+        )}
+      </View>
+      <View style={styles.right}>
+        <Text style={[styles.amount, { color: amountColor }]} numberOfLines={1}>
+          {formatSigned(t.amount, t.type, t.accountCurrency ?? 'COP')}
+        </Text>
+        {!!t.installments && t.installments > 1 && (
+          <View style={styles.installmentBadge}>
+            <Icon name="credit-card" size={10} color={theme.colors.textSecondary} />
+            <Text style={styles.installmentText}>
+              Cuota {t.currentInstallment ?? 1}/{t.installments}
+            </Text>
+          </View>
+        )}
+        <View style={styles.metaRow}>
+          {!!t.receiptFilename && <Icon name="paperclip" size={12} color={theme.colors.textMuted} />}
+          <Text style={styles.time}>{formatTime(t.time)}</Text>
+        </View>
+      </View>
+    </Pressable>
+  );
+}
+
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.md,
+    gap: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.cardBorder,
+    borderLeftWidth: 4,
+  },
+  iconWrap: { width: 44, height: 44, borderRadius: theme.borderRadius.full, alignItems: 'center', justifyContent: 'center' },
+  info: { flex: 1 },
+  title: { color: theme.colors.text, fontSize: theme.fontSize.md, fontWeight: theme.fontWeight.semibold },
+  subtitle: { color: theme.colors.textSecondary, fontSize: theme.fontSize.sm, marginTop: 2 },
+  tagsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 4 },
+  right: { alignItems: 'flex-end' },
+  amount: { fontSize: theme.fontSize.md, fontWeight: theme.fontWeight.semibold },
+  installmentBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    marginTop: 3,
+    backgroundColor: theme.colors.surfaceAccent,
+    borderRadius: theme.borderRadius.full,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+  },
+  installmentText: { color: theme.colors.textSecondary, fontSize: theme.fontSize.xs, fontWeight: theme.fontWeight.medium },
+  metaRow: { flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 2 },
+  time: { color: theme.colors.textMuted, fontSize: theme.fontSize.xs },
+});
+
+// Memoizado: se renderiza por fila en listas; con props estables evita re-render.
+export const TransactionCard = React.memo(TransactionCardComponent);

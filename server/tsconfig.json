@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts"],
+  // Los .test.ts quedan FUERA del build/typecheck de tsc: no deben compilarse a
+  // dist/ (Render) y algunos importan utils del mobile (fuera de rootDir). Los
+  // corre y transpila vitest (`pnpm test`), que resuelve el import cross-package.
+  "exclude": ["node_modules", "dist", "drizzle", "src/**/*.test.ts"]
+}
